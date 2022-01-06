@@ -1,15 +1,11 @@
-
-
-import 'package:finacash/Helper/Movimentacoes_helper.dart';
+import 'package:finacash/model/Movimentacoes.dart';
+import 'package:finacash/repository/Movimentacoes_repository.dart';
 import 'package:flutter/material.dart';
-
 import 'CustomDialog.dart';
 
 class CardMovimentacoesItem extends StatelessWidget {
-
   final Movimentacoes mov;
   final bool lastItem;
-
 
   const CardMovimentacoesItem({Key key, this.mov,this.lastItem=false}) : super(key: key);
 
@@ -31,7 +27,6 @@ class CardMovimentacoesItem extends StatelessWidget {
               Text("${mov.descricao}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: width * 0.045,color:mov.tipo.toString() =="r" ?Colors.green[600] : Colors.red[600])),
               Text("R\$ ${mov.valor}",style: TextStyle(fontWeight: FontWeight.bold,color: mov.tipo.toString() =="r" ?Colors.green[600] : Colors.red[600])),
                 
-              
               SizedBox(height: 40,),
               Divider(color: Colors.grey[400],height: 2,),
               SizedBox(height: 40,),
@@ -49,7 +44,7 @@ class CardMovimentacoesItem extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: (){
-                        MovimentacoesHelper movHelper = MovimentacoesHelper();
+                        MovimentacoesRepository movHelper = MovimentacoesRepository();
                         movHelper.deleteMovimentacao(mov);
                         Navigator.pop(context);
                       },
@@ -151,7 +146,6 @@ class CardMovimentacoesItem extends StatelessWidget {
             color: mov.tipo == "r" ? Colors.green[700] : Colors.red[700],
             fontWeight: FontWeight.bold,
             fontSize: width * 0.044,
-            
           ),),
         ],
       ),

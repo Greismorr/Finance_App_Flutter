@@ -1,4 +1,5 @@
-import 'package:finacash/Helper/Movimentacoes_helper.dart';
+import 'package:finacash/model/Movimentacoes.dart';
+import 'package:finacash/repository/Movimentacoes_repository.dart';
 import 'package:flutter/material.dart';
 
 class TimeLineItem extends StatelessWidget {

@@ -1,16 +1,16 @@
 import 'dart:ui';
-
-import 'package:finacash/Helper/Movimentacoes_helper.dart';
 import 'package:finacash/Widgets/AnimatedBottomNavBar.dart';
 import 'package:finacash/Widgets/CardMovimentacoesItem.dart';
 import 'package:finacash/Widgets/CustomDialog.dart';
+import 'package:finacash/Widgets/mudarNomeDialog.dart';
+import 'package:finacash/model/Movimentacoes.dart';
+import 'package:finacash/model/User.dart';
+import 'package:finacash/repository/Movimentacoes_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,17 +24,34 @@ class _HomePageState extends State<HomePage> {
   var height;
   bool recDesp = false;
   final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
-  MovimentacoesHelper movHelper = MovimentacoesHelper();
+  MovimentacoesRepository movHelper = MovimentacoesRepository();
   TextEditingController _valorController = TextEditingController();
   CalendarController calendarController;
-  MovimentacoesHelper movimentacoesHelper = MovimentacoesHelper();
-  List<Movimentacoes> listmovimentacoes = List();
-  List<Movimentacoes> ultimaTarefaRemovida = List();
-
+  MovimentacoesRepository movimentacoesHelper = MovimentacoesRepository();
+  List<Movimentacoes> listmovimentacoes = [];
+  List<Movimentacoes> ultimaTarefaRemovida = [];
   var dataAtual = new DateTime.now();
   var formatter = new DateFormat('dd-MM-yyyy');
   var formatterCalendar = new DateFormat('MM-yyyy');
+  User user = User(nome: "FinaCash");
   String dataFormatada;
+
+  @override
+  void initState() {
+    super.initState();
+    calendarController = CalendarController();
+
+    if (DateTime.now().month != false) {
+      //saldoAtual = "1259";
+    }
+
+    movimentacoesHelper.getUser().then((userOnDb) {
+      user = userOnDb;
+    });
+
+    dataFormatada = formatterCalendar.format(dataAtual);
+    _allMovMes(dataFormatada);
+  }
 
   String format(double n) {
     return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 2);
@@ -62,7 +79,7 @@ class _HomePageState extends State<HomePage> {
     mov.tipo = "r";
     mov.data = "10-03-2020"; //dataFormatada;
     mov.descricao = "CashBack";
-    MovimentacoesHelper movimentacoesHelper = MovimentacoesHelper();
+    MovimentacoesRepository movimentacoesHelper = MovimentacoesRepository();
     movimentacoesHelper.saveMovimentacao(mov);
     mov.toString();
   }
@@ -99,29 +116,21 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    calendarController = CalendarController();
-    if (DateTime.now().month != false) {
-      //saldoAtual = "1259";
-    }
-    //_salvar();
-    dataFormatada = formatterCalendar.format(dataAtual);
-    print(dataFormatada);
-    _allMovMes(dataFormatada);
-
-    //_allMov();
-  }
-
   _dialogAddRecDesp() {
     showDialog(
         context: context,
         builder: (context) {
           return CustomDialog();
         });
+  }
+
+  _changeNameDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ChangeNameDialog(user: user);
+      },
+    );
   }
 
   @override
@@ -161,11 +170,22 @@ class _HomePageState extends State<HomePage> {
                 Positioned(
                   top: width * 0.18, //70
                   left: width * 0.07, //30,
-                  child: Text(
-                    "FinaCash",
-                    style: TextStyle(
-                        color: Colors.white, fontSize: width * 0.074 //30
-                        ),
+                  child: Row(
+                    children: [
+                      Text(
+                        user.nome,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.074 //30
+                            ),
+                      ),
+                      IconButton(
+                        tooltip: "Editar nome",
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          _changeNameDialog();
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 Positioned(
@@ -210,18 +230,17 @@ class _HomePageState extends State<HomePage> {
                               padding: EdgeInsets.only(left: width * 0.05),
                               child: Container(
                                 width: width * 0.6,
-                                
                                 child: Text(
-                                saldoAtual,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                  saldoAtual,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
                                     color: Colors
                                         .lightBlue[700], //Colors.indigo[400],
                                     fontWeight: FontWeight.bold,
                                     fontSize: _saldoTamanho(saldoAtual),
-                                        //width * 0.1 //_saldoTamanho(saldoAtual)
-                                    ),
-                              ),
+                                    //width * 0.1 //_saldoTamanho(saldoAtual)
+                                  ),
+                                ),
                               ),
                             ),
                             Padding(
@@ -370,7 +389,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       key: ValueKey(mov.id),
                       background: Container(
-                        padding: EdgeInsets.only(right: 10 ,top: width * 0.04),
+                        padding: EdgeInsets.only(right: 10, top: width * 0.04),
                         alignment: Alignment.topRight,
                         color: Colors.red,
                         child: Icon(
@@ -381,7 +400,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: CardMovimentacoesItem(
                         mov: mov,
-                        lastItem: listmovimentacoes[index] == listmovimentacoes.last? true : false,
+                        lastItem:
+                            listmovimentacoes[index] == listmovimentacoes.last
+                                ? true
+                                : false,
                       ),
                     );
                   },
@@ -390,7 +412,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: EdgeInsets.only(top: 20),
-              child: Text( "EEEEEEEEE"),
+              child: Text("EEEEEEEEE"),
             )
           ],
         ),

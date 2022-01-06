@@ -1,4 +1,3 @@
-import 'package:finacash/Helper/Movimentacoes_helper.dart';
 import 'package:finacash/Widgets/AnimatedBottomNavBar.dart';
 import 'package:finacash/Widgets/CardMovimentacoesItem.dart';
 import 'package:finacash/screen/DespesasResumo.dart';
@@ -7,13 +6,10 @@ import 'package:finacash/screen/ReceitasResumo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
 import 'package:table_calendar/table_calendar.dart';
 
 class InicialPage extends StatefulWidget {
-
   final List<BarItem> barItems = [
-    
     BarItem(
       text: "Despesas",
       iconData: Icons.remove_circle_outline,
@@ -24,7 +20,6 @@ class InicialPage extends StatefulWidget {
       iconData:  Icons.home,
       color: Colors.indigo,
     ),
-    
     BarItem(
       text: "Receitas",
       iconData: Icons.add_circle_outline,
@@ -43,12 +38,8 @@ class InicialPage extends StatefulWidget {
 }
 
 class _InicialPageState extends State<InicialPage> {
-  
   int selectedBarIndex = 1;
   
-  
-  
-
   @override
   Widget build(BuildContext context) {
 
@@ -91,7 +82,6 @@ class _InicialPageState extends State<InicialPage> {
             });
           },
       ),
-
     );
   }
 }

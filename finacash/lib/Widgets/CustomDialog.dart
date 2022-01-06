@@ -1,11 +1,11 @@
-import 'package:finacash/Helper/Movimentacoes_helper.dart';
+import 'package:finacash/model/Movimentacoes.dart';
+import 'package:finacash/repository/Movimentacoes_repository.dart';
 import 'package:finacash/screen/HomePage.dart';
 import 'package:finacash/screen/InicialPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomDialog extends StatefulWidget {
-
   final Movimentacoes mov;
   const CustomDialog({Key key, this.mov}) : super(key: key);
 
@@ -16,33 +16,31 @@ class CustomDialog extends StatefulWidget {
 class _CustomDialogState extends State<CustomDialog> {
   var formatter = new DateFormat('dd-MM-yyyy');
   bool edit;
-  
   int _groupValueRadio = 1;
   Color _colorContainer = Colors.green[400];
   Color _colorTextButtom = Colors.green;
   TextEditingController _controllerValor = TextEditingController();
   TextEditingController _controllerDesc = TextEditingController();
-
-  MovimentacoesHelper _movHelper = MovimentacoesHelper();
+  MovimentacoesRepository _movHelper = MovimentacoesRepository();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    if(widget.mov != null){
+    if (widget.mov != null) {
       print(widget.mov.toString());
 
       edit = true;
-      if(widget.mov.tipo == "d"){ 
-        _groupValueRadio =2;
+      if (widget.mov.tipo == "d") {
+        _groupValueRadio = 2;
         _colorContainer = Colors.red[300];
         _colorTextButtom = Colors.red[300];
-        }
-      
+      }
+
       _controllerValor.text = widget.mov.valor.toString().replaceAll("-", "");
       _controllerDesc.text = widget.mov.descricao;
-    }else{
+    } else {
       edit = false;
     }
     print(" edit -> $edit");
@@ -53,7 +51,8 @@ class _CustomDialogState extends State<CustomDialog> {
     double width = MediaQuery.of(context).size.width;
 
     return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(width * 0.050)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(width * 0.050)),
         title: Text(
           "Adicionar Valores",
           textAlign: TextAlign.center,
@@ -83,11 +82,11 @@ class _CustomDialogState extends State<CustomDialog> {
                         decoration: new InputDecoration(
                           hintText: "0.00",
                           hintStyle: TextStyle(color: Colors.white54),
-                          contentPadding:  EdgeInsets.only(
-                              left: width * 0.04, 
-                              top: width * 0.041, 
-                              bottom: width * 0.041, 
-                              right: width * 0.04),//15),
+                          contentPadding: EdgeInsets.only(
+                              left: width * 0.04,
+                              top: width * 0.041,
+                              bottom: width * 0.041,
+                              right: width * 0.04), //15),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(width * 0.04),
                             borderSide: BorderSide(
@@ -123,7 +122,7 @@ class _CustomDialogState extends State<CustomDialog> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: width * 0.01),
-                    child: Text("receita"),
+                    child: Text("Receita"),
                   )
                 ],
               ),
@@ -144,7 +143,7 @@ class _CustomDialogState extends State<CustomDialog> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: width * 0.01),
-                    child: Text("despesa"),
+                    child: Text("Despesa"),
                   )
                 ],
               ),
@@ -160,10 +159,10 @@ class _CustomDialogState extends State<CustomDialog> {
                     labelText: "Descrição",
                     labelStyle: TextStyle(color: Colors.white54),
                     //hintStyle: TextStyle(color: Colors.grey[400]),
-                    contentPadding:  EdgeInsets.only(
-                        left: width * 0.04, 
-                        top: width * 0.041, 
-                        bottom: width * 0.041, 
+                    contentPadding: EdgeInsets.only(
+                        left: width * 0.04,
+                        top: width * 0.041,
+                        bottom: width * 0.041,
                         right: width * 0.04),
 
                     focusedBorder: OutlineInputBorder(
@@ -187,7 +186,7 @@ class _CustomDialogState extends State<CustomDialog> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pop(context);
                       },
                       child: Text(
@@ -196,32 +195,40 @@ class _CustomDialogState extends State<CustomDialog> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: (){
-                        
-                        if(_controllerValor.text.isNotEmpty && _controllerDesc.text.isNotEmpty){
+                      onTap: () {
+                        if (_controllerValor.text.isNotEmpty &&
+                            _controllerDesc.text.isNotEmpty) {
                           Movimentacoes mov = Movimentacoes();
                           String valor;
-                          if(_controllerValor.text.contains(",")){
-                             valor = _controllerValor.text.replaceAll( RegExp(","), ".");
-                            }else{
-                              valor = _controllerValor.text; 
-                            }
+                          if (_controllerValor.text.contains(",")) {
+                            valor = _controllerValor.text
+                                .replaceAll(RegExp(","), ".");
+                          } else {
+                            valor = _controllerValor.text;
+                          }
 
                           mov.data = formatter.format(DateTime.now());
                           mov.descricao = _controllerDesc.text;
-                          
-                          if(_groupValueRadio == 1){
-                            
+
+                          if (_groupValueRadio == 1) {
                             mov.valor = double.parse(valor);
-                            mov.tipo ="r";
-                            if(widget.mov != null){ mov.id = widget.mov.id;}
-                            edit == false ? _movHelper.saveMovimentacao(mov) : _movHelper.updateMovimentacao(mov);
+                            mov.tipo = "r";
+                            if (widget.mov != null) {
+                              mov.id = widget.mov.id;
+                            }
+                            edit == false
+                                ? _movHelper.saveMovimentacao(mov)
+                                : _movHelper.updateMovimentacao(mov);
                           }
-                          if(_groupValueRadio == 2){
+                          if (_groupValueRadio == 2) {
                             mov.valor = double.parse("-" + valor);
-                            mov.tipo ="d";
-                            if(widget.mov != null){ mov.id = widget.mov.id;}
-                            edit == false ? _movHelper.saveMovimentacao(mov) : _movHelper.updateMovimentacao(mov);
+                            mov.tipo = "d";
+                            if (widget.mov != null) {
+                              mov.id = widget.mov.id;
+                            }
+                            edit == false
+                                ? _movHelper.saveMovimentacao(mov)
+                                : _movHelper.updateMovimentacao(mov);
                           }
                           Navigator.pop(context);
                           //initState();
@@ -229,9 +236,9 @@ class _CustomDialogState extends State<CustomDialog> {
                       },
                       child: Container(
                         padding: EdgeInsets.only(
-                            top: width * 0.02, 
-                            bottom: width * 0.02, 
-                            left: width * 0.03, 
+                            top: width * 0.02,
+                            bottom: width * 0.02,
+                            left: width * 0.03,
                             right: width * 0.03),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
@@ -239,7 +246,7 @@ class _CustomDialogState extends State<CustomDialog> {
                         ),
                         child: Center(
                           child: Text(
-                            edit == false ?"Confirmar" : "Editar",
+                            edit == false ? "Confirmar" : "Editar",
                             style: TextStyle(
                                 color: _colorTextButtom,
                                 fontWeight: FontWeight.bold,

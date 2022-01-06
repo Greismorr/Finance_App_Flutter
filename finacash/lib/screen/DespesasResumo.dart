@@ -1,7 +1,7 @@
-import 'package:finacash/Helper/Movimentacoes_helper.dart';
 import 'package:finacash/Widgets/TimeLineItem.dart';
+import 'package:finacash/model/Movimentacoes.dart';
+import 'package:finacash/repository/Movimentacoes_repository.dart';
 import 'package:flutter/material.dart';
-
 
 class DespesasResumo extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class DespesasResumo extends StatefulWidget {
 }
 
 class _DespesasResumoState extends State<DespesasResumo> {
-  MovimentacoesHelper movimentacoesHelper = MovimentacoesHelper();
+  MovimentacoesRepository movimentacoesHelper = MovimentacoesRepository();
   List<Movimentacoes> listmovimentacoes = List();
 
   _allMovPorTipo() {
