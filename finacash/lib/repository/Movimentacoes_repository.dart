@@ -32,6 +32,7 @@ class MovimentacoesRepository {
           "$dataColumn TEXT," +
           "$tipoColumn TEXT," +
           "$descricaoColumn TEXT," +
+          "$isMensalColumn BOOL," +
           "$fkUserId INTEGER, "
               "FOREIGN KEY($fkUserId) REFERENCES $usersTABLE(idColumn)"
               ")");
@@ -133,12 +134,13 @@ class MovimentacoesRepository {
   Future<List> getAllMovimentacoesPorMes(String data) async {
     Database dbMovimentacoes = await db;
     List listMap = await dbMovimentacoes.rawQuery(
-        "SELECT * FROM $movimentacaoTABLE WHERE $dataColumn LIKE '%$data%'");
+        "SELECT * FROM $movimentacaoTABLE WHERE $dataColumn LIKE '%$data%' OR $isMensalColumn=TRUE");
     List<Movimentacoes> listMovimentacoes = [];
 
     for (Map m in listMap) {
       listMovimentacoes.add(Movimentacoes.fromMap(m));
     }
+
     return listMovimentacoes;
   }
 

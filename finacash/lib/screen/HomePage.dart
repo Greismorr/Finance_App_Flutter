@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                       width: double.infinity,
                       height: height * 0.28, //250,
                       decoration: BoxDecoration(
-                        color: Colors.lightBlue[700], //Colors.indigo[400],
+                        color: Colors.purple, //Colors.indigo[400],
                       )),
                 ),
                 Positioned(
@@ -180,7 +180,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       IconButton(
                         tooltip: "Editar nome",
-                        icon: const Icon(Icons.edit),
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
                         onPressed: () {
                           _changeNameDialog();
                         },
@@ -234,8 +237,7 @@ class _HomePageState extends State<HomePage> {
                                   saldoAtual,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: Colors
-                                        .lightBlue[700], //Colors.indigo[400],
+                                    color: Colors.purple, //Colors.indigo[400],
                                     fontWeight: FontWeight.bold,
                                     fontSize: _saldoTamanho(saldoAtual),
                                     //width * 0.1 //_saldoTamanho(saldoAtual)
@@ -258,8 +260,8 @@ class _HomePageState extends State<HomePage> {
                                   width: width * 0.12,
                                   height: width * 0.12, //65,
                                   decoration: BoxDecoration(
-                                      color: Colors
-                                          .lightBlue[700], //Colors.indigo[400],
+                                      color:
+                                          Colors.purple, //Colors.indigo[400],
                                       borderRadius: BorderRadius.circular(50),
                                       boxShadow: [
                                         BoxShadow(

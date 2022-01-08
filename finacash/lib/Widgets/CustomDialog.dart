@@ -22,10 +22,10 @@ class _CustomDialogState extends State<CustomDialog> {
   TextEditingController _controllerValor = TextEditingController();
   TextEditingController _controllerDesc = TextEditingController();
   MovimentacoesRepository _movHelper = MovimentacoesRepository();
+  bool checkboxValue = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (widget.mov != null) {
@@ -147,6 +147,18 @@ class _CustomDialogState extends State<CustomDialog> {
                   )
                 ],
               ),
+              CheckboxListTile(
+                activeColor: Colors.black,
+                value: checkboxValue,
+                title: const Text(
+                  "Repetir Mensalmente",
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    checkboxValue = value;
+                  });
+                },
+              ),
               TextField(
                   controller: _controllerDesc,
                   maxLength: 20,
@@ -209,6 +221,7 @@ class _CustomDialogState extends State<CustomDialog> {
 
                           mov.data = formatter.format(DateTime.now());
                           mov.descricao = _controllerDesc.text;
+                          mov.isMensal = checkboxValue;
 
                           if (_groupValueRadio == 1) {
                             mov.valor = double.parse(valor);

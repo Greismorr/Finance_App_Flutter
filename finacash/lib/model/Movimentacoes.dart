@@ -6,6 +6,7 @@ class Movimentacoes {
   double valor;
   String tipo;
   String descricao;
+  bool isMensal;
 
   Movimentacoes();
 
@@ -15,6 +16,7 @@ class Movimentacoes {
     data = map[dataColumn];
     tipo = map[tipoColumn];
     descricao = map[descricaoColumn];
+    isMensal = map[isMensal];
   }
 
   Map toMap() {
@@ -23,6 +25,7 @@ class Movimentacoes {
       dataColumn: data,
       tipoColumn: tipo,
       descricaoColumn: descricao,
+      isMensalColumn: isMensal,
     };
     if (id != null) {
       map[idColumn] = id;

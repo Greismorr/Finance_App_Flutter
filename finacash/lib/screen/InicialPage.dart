@@ -17,8 +17,8 @@ class InicialPage extends StatefulWidget {
     ),
     BarItem(
       text: "Home",
-      iconData:  Icons.home,
-      color: Colors.indigo,
+      iconData: Icons.home,
+      color: Colors.purple,
     ),
     BarItem(
       text: "Receitas",
@@ -39,31 +39,24 @@ class InicialPage extends StatefulWidget {
 
 class _InicialPageState extends State<InicialPage> {
   int selectedBarIndex = 1;
-  
+
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //systemNavigationBarColor: Colors.lightBlue[700], // navigation bar color
-    //statusBarColor: Colors.lightBlue[700],
-    systemNavigationBarIconBrightness: Brightness.dark,
-    systemNavigationBarColor: Colors.white,
-    statusBarIconBrightness: Brightness.light // status bar color
-  ));
+        //systemNavigationBarColor: Colors.lightBlue[700], // navigation bar color
+        //statusBarColor: Colors.lightBlue[700],
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.light // status bar color
+        ));
 
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    
 
-    List<Widget> telas =[
-      
-      DespesasResumo(),
-      HomePage(),
-      ReceitasResumo()   
-    ];
+    List<Widget> telas = [DespesasResumo(), HomePage(), ReceitasResumo()];
 
     //_allMov();
     //print("\nMes atual: " + DateTime.now().month.toString());
@@ -71,16 +64,13 @@ class _InicialPageState extends State<InicialPage> {
       body: telas[selectedBarIndex],
       bottomNavigationBar: AnimatedBottomBar(
         barItems: widget.barItems,
-          animationDuration: const Duration(milliseconds: 150),
-          barStyle: BarStyle(
-            fontSize: width * 0.045,
-            iconSize: width * 0.07
-          ),
-          onBarTap: (index){
-            setState(() {
-              selectedBarIndex = index;
-            });
-          },
+        animationDuration: const Duration(milliseconds: 150),
+        barStyle: BarStyle(fontSize: width * 0.045, iconSize: width * 0.07),
+        onBarTap: (index) {
+          setState(() {
+            selectedBarIndex = index;
+          });
+        },
       ),
     );
   }
